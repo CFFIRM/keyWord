@@ -25,3 +25,9 @@ $(function () {
 });
 
 ```
+
+属性说明：
+* panel:面板的id
+* value:隐藏字段的id
+* max:最多输入关键字个数
+* tips:提示语
