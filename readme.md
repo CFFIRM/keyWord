@@ -7,6 +7,35 @@
 * keyWord.init方法初始化方法
 
 ```html
+
+<style>
+	.block {
+		display:flex;
+		flex-direction:row;
+		align-items:center;
+		width:500px;
+		height:30px;
+		border:1px solid #ddd;
+		padding:10px;
+		margin:100px auto 0;
+	}
+	#wordTags {
+		display:flex;
+		flex-wrap:nowrap;
+	}
+	input{
+		width:100%;
+		height:20px;
+		border:none;
+	}
+</style>
+
+<div class="block">
+	<div id="wordTags"></div>
+	<input id="wordInput" type="text" name="" placeholder="请输入关键词以空格结尾">
+	<input id="wordHiddenInput" type="hidden" name="">
+</div>
+
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
 <script type="text/javascript" src="aspect.js"></script>
 <script type="text/javascript" src="keyWord.js"></script>
