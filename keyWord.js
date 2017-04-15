@@ -22,7 +22,9 @@ List.prototype = {
     return this.dataStore.length;
   },
   concat: function(arr) {
-    this.dataStore = arr.concat();
+    this.dataStore = arr.filter(function(){
+    	return true;
+    });
   },
   remove: function(index) {
 
@@ -30,7 +32,6 @@ List.prototype = {
       return;
     }
     this.dataStore.splice(index,1);
-    var _prev = this.dataStore.concat();
   },
   clear: function() {
     this.dataStore = [];
