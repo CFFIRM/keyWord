@@ -5,43 +5,65 @@
  */
 function List() {
   this.dataStore = new Array();
+  this.listSize = 0;
+  this.pos = 0;
 }
 List.prototype = {
   constructor: List,
   append: function(name) {
-    this.dataStore.push(name)
+    this.dataStore[this.listSize++] = name;
   },
   front: function() {
-    return 1;
+    this.pos = 0;
   },
   end: function() {
-    var index = this.dataStore.length - 1;
-    return index > -1 ? index : 0;
+    this.pos = this.listSize - 1;
   },
   length: function() {
-    return this.dataStore.length;
+    return this.dataStore.listSize;
   },
   concat: function(arr) {
-    this.dataStore = arr.filter(function(){
-    	return true;
+  	var that = this;
+    arr.forEach(function(data,i, array){
+    	that.append(data);
     });
   },
-  remove: function(index) {
+  find:function(name){
+  	var index = -1;
+  	this.dataStore.forEach(function(data, i, array){
+  		if(data == name) {
+  			index = i;
+  		}
+  	});
+  	return index;
+  },
+  remove: function(name) {
 
-    if (index < 0) {
-      return;
+    var index = this.find(name);
+    if(index > -1) {
+    	this.dataStore.splice(index,1);
+    	--this.listSize;
+    	return true;
     }
-    this.dataStore.splice(index,1);
+
+    return false;
+
+
+  },
+  getElement: function() {
+  	return this.dataStore[this.pos];
   },
   clear: function() {
+  	delete this.dataStore;
     this.dataStore = [];
+    this.pos = this.listSize = 0;
   },
   getAllElement: function() {
     return this.dataStore.map(function(name, i, array) {
       return {
         id: i,
         name: name,
-        html: '<div class="tag-checked-name">' + name.substr(0, 10) + '<em  data-word-tag-close="' + i + '"></em></div>'
+        html: '<div class="tag-checked-name">' + name.substr(0, 10) + '<em data-word-tag-close="' + name + '"></em></div>'
       }
     })
   }
@@ -88,7 +110,9 @@ var doKeyWord = function(options) {
     },
     add: function(name) {
       // 添加数据
-
+      if(list.find(name) > -1) {
+      	return false;
+      }
       list.append(name);
     },
     clear: function() {
@@ -99,6 +123,9 @@ var doKeyWord = function(options) {
     },
     end: function() {
       return list.end()
+    },
+    getElement: function(){
+    	return list.getElement();
     },
     remove: function(index) {
       list.remove(index);
@@ -153,7 +180,8 @@ $(function() {
       var that = $(this);
       var val = $.trim(that.val());
       if (val == "" && e.keyCode == 8) {
-        keyWord.remove(keyWord.end());
+      	keyWord.end();
+        keyWord.remove(keyWord.getElement());
       }
     });
 
