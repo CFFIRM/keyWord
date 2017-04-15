@@ -20,7 +20,7 @@ List.prototype = {
     this.pos = this.listSize - 1;
   },
   length: function() {
-    return this.dataStore.listSize;
+    return this.listSize;
   },
   find:function(name){
   	var index = -1;
