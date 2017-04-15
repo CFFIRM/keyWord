@@ -22,12 +22,6 @@ List.prototype = {
   length: function() {
     return this.dataStore.listSize;
   },
-  concat: function(arr) {
-  	var that = this;
-    arr.forEach(function(data,i, array){
-    	that.append(data);
-    });
-  },
   find:function(name){
   	var index = -1;
   	this.dataStore.forEach(function(data, i, array){
@@ -81,7 +75,7 @@ var doKeyWord = function(options) {
 
   return AOP.mixin({
     init: function(arr) {
-
+    	var that = this;
       // 初始化
       if (typeof arr == "string") {
         arr = arr == '' ? [] : arr.split(',');
@@ -92,7 +86,9 @@ var doKeyWord = function(options) {
       // 清空数据
       list.clear();
       // 便利添加数据中
-      list.concat(arr);
+      arr.forEach(function(data, i, array){
+      	that.add(data);
+      })
     },
     render: function() {
       // 渲染效果
