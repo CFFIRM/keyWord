@@ -1,6 +1,6 @@
 一个简单的输入关键字添加标签效果
 
-![keyWord](https://www.github.com/bxcn/keyWord/keyWord.png)
+![keyWord](https://github.com/bxcn/keyWord/blob/master/keyWord.png)
 
 实现功能：
 * 输入关键字加空格键添加tag标签
