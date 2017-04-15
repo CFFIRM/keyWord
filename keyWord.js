@@ -29,10 +29,8 @@ List.prototype = {
     if (index < 0) {
       return;
     }
+    this.dataStore.splice(index,1);
     var _prev = this.dataStore.concat();
-    this.dataStore = _prev.filter(function(data, i, array) {
-      return i != index;
-    });
   },
   clear: function() {
     this.dataStore = [];
