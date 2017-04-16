@@ -176,9 +176,9 @@ $(function() {
     var that = $(this);
     // 删除元素
     $(document).on('click', '[data-word-tag-close]', function() {
-      var id = $(this).data('word-tag-close');
+      var name = $(this).data('word-tag-close');
       // 过滤掉不删除的
-      keyWord.remove(id);
+      keyWord.remove(name);
     });
     /**
      * Backspace删除 对应的键盘编码
