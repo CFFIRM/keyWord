@@ -1,7 +1,6 @@
 /**
  * 定义一个列表数据结构
  * 作用：添加元素、删除元素、清除所有元素，将数据中的元素组装成对象返回一个数据
- * 只针对数据处理
  * @constructor
  */
 function List() {
@@ -14,9 +13,6 @@ List.prototype = {
   append: function(name) {
     this.dataStore[this.listSize++] = name;
   },
-  cusPos: function() {
-    return this.pos;
-  },
   front: function() {
     this.pos = 0;
   },
@@ -26,32 +22,22 @@ List.prototype = {
   length: function() {
     return this.listSize;
   },
-  prev: function() {
-    if (this.pos > 0) {
-      --this.pos;
-    }
-  },
-  next: function() {
-    if (this.pos < this.listSize) {
-      ++this.pos;
-    }
-  },
-  find: function(name) {
-    var index = -1;
-    this.dataStore.forEach(function(data, i, array) {
-      if (data == name) {
-        index = i;
-      }
-    });
-    return index;
+  find:function(name){
+  	var index = -1;
+  	this.dataStore.forEach(function(data, i, array){
+  		if(data == name) {
+  			index = i;
+  		}
+  	});
+  	return index;
   },
   remove: function(name) {
 
     var index = this.find(name);
-    if (index > -1) {
-      this.dataStore.splice(index, 1);
-      --this.listSize;
-      return true;
+    if(index > -1) {
+    	this.dataStore.splice(index,1);
+    	--this.listSize;
+    	return true;
     }
 
     return false;
@@ -59,18 +45,26 @@ List.prototype = {
 
   },
   getElement: function() {
-    return this.dataStore[this.pos];
+  	return this.dataStore[this.pos];
   },
   clear: function() {
-    delete this.dataStore;
+  	delete this.dataStore;
     this.dataStore = [];
     this.pos = this.listSize = 0;
+  },
+  getAllElement: function() {
+    return this.dataStore.map(function(name, i, array) {
+      return {
+        id: i,
+        name: name,
+        html: '<div class="tag-checked-name">' + name.substr(0, 10) + '<em data-word-tag-close="' + name + '"></em></div>'
+      }
+    })
   }
 }
 
 /**
  * 定义一个用来对列表操作的对象
- * 对列表的一个包装
  * @param options
  */
 var doKeyWord = function(options) {
@@ -81,7 +75,7 @@ var doKeyWord = function(options) {
 
   return AOP.mixin({
     init: function(arr) {
-      var that = this;
+    	var that = this;
       // 初始化
       if (typeof arr == "string") {
         arr = arr == '' ? [] : arr.split(',');
@@ -92,40 +86,30 @@ var doKeyWord = function(options) {
       // 清空数据
       list.clear();
       // 便利添加数据中
-      arr.forEach(function(data, i, array) {
-        that.add(data);
+      arr.forEach(function(data, i, array){
+      	that.add(data);
       })
     },
     render: function() {
       // 渲染效果
 
-      var valueArr = [],
-        html = [],
-        name;
-
-      for (list.front(); list.cusPos() < list.length(); list.next()) {
-        name = list.getElement();
-        valueArr.push(name);
-        html.push('<div class="tag-checked-name">' + name.substr(0, 10) + '<em data-word-tag-close="' + name + '"></em></div>')
-      }
+      var valueArr = [];
+      var array = list.getAllElement();
+      var html = array.map(function(data, index) {
+        valueArr.push(data.name);
+        return data.html;
+      });
 
       $(settings.panel).html(html.join(''));
       $(settings.value).val(valueArr.join(','));
 
     },
     add: function(name) {
-      name = $.trim(name);
-      if (name == '') {
-        return false;
-      }
       // 添加数据
-      if (list.find(name) > -1) {
-        return false;
+      if(list.find(name) > -1) {
+      	return false;
       }
       list.append(name);
-    },
-    remove: function(name) {
-      list.remove(name);
     },
     clear: function() {
       list.clear();
@@ -136,8 +120,11 @@ var doKeyWord = function(options) {
     end: function() {
       return list.end()
     },
-    getElement: function() {
-      return list.getElement();
+    getElement: function(){
+    	return list.getElement();
+    },
+    remove: function(index) {
+      list.remove(index);
     },
     length: function() {
       return list.length();
@@ -153,6 +140,7 @@ $(function() {
 
     // 对添加的数据进行检查
     function doCheck() {
+      console.log(options.max + "  " + keyWord.length());
       if (options.max < keyWord.length() + 1) {
         alert(options.tips);
         return false;
@@ -176,9 +164,9 @@ $(function() {
     var that = $(this);
     // 删除元素
     $(document).on('click', '[data-word-tag-close]', function() {
-      var name = $(this).data('word-tag-close');
+      var id = $(this).data('word-tag-close');
       // 过滤掉不删除的
-      keyWord.remove(name);
+      keyWord.remove(id);
     });
     /**
      * Backspace删除 对应的键盘编码
@@ -188,7 +176,7 @@ $(function() {
       var that = $(this);
       var val = $.trim(that.val());
       if (val == "" && e.keyCode == 8) {
-        keyWord.end();
+      	keyWord.end();
         keyWord.remove(keyWord.getElement());
       }
     });
